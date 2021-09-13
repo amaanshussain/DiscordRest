@@ -255,9 +255,3 @@ class DiscordRest:
 
         return response.json()
     
-    
-    
-
-
-
-d = DiscordRest("NzU0OTUwMzY3NDQzMjg4MDg0.X18MUQ.oUFgh-sLblZZcRcqxPLZTYuIWI0")
