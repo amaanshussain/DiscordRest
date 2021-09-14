@@ -40,7 +40,7 @@ class DiscordRest:
 
         return response
 
-    # Audit
+# Audit
     def audit_log(self, guild_id: int, user_id: int = None, action_type: int = None, before: int = None, limit: int = None) -> dict:
         """
         Requires the 'VIEW_AUDIT_LOG' permission.
@@ -62,7 +62,7 @@ class DiscordRest:
 
         return response.json()
 
-    # Channels
+# Channels
     def get_channel(self, channel_id: int) -> dict:
         """
         Gets channel object by id.
@@ -145,8 +145,59 @@ class DiscordRest:
 
         return response.json()
 
+    def create_message(self, channel_id: int, content: str = None, embeds: dict = None) -> dict:
+        """
+        Creates message is specified channel. Can send message or an array of jsonified embeds, or both.
+        """
 
-    # Emoji
+        params = {}
+        if content != None:
+            params["content"] = content
+        if embeds != None:
+            params["embeds"] = embeds
+        
+        response = self._post(f"/channels/{channel_id}/messages", params = params, headers = self.headers)
+
+        return response.json()
+
+    # reactions to be added or not idk
+
+    def edit_message(self, channel_id: int, message_id: int, content: str = None, embeds: dict = None) -> dict:
+        """
+        Edits message of specified message. Can edit message or an array of jsonified embeds, or both.
+        """
+
+        params = {}
+        if content != None:
+            params["content"] = content
+        if embeds != None:
+            params["embeds"] = embeds
+        
+        response = self._patch(f"/channels/{channel_id}/messages/{message_id}", params = params, headers = self.headers)
+
+        return response.json()
+
+    def delete_message(self, channel_id: int, message_id: int) -> dict:
+        """
+        Deletes specified message.
+        """
+
+        response = self._delete(f"/channels/{channel_id}/messages/{message_id}", headers = self.headers)
+
+        return response.json()
+    
+    def get_invites(self, channel_id: int) -> dict:
+        """
+        Get all invites in channel.
+        """
+
+        response = self._get(f"/channels/{channel_id}/invites", headers = self.headers)
+
+        return response.json()
+    
+
+
+# Emoji
     def get_emojis(self, guild_id: int) -> dict:
         """
         Retrives list of emojis from server.
@@ -207,8 +258,7 @@ class DiscordRest:
 
         return response.json()
 
-
-    # User
+# User
     def get_user(self, user_id) -> dict:
         """
         Retrieves user object given id.
@@ -254,4 +304,32 @@ class DiscordRest:
         response = self._delete(f"/users/@me/guilds/{guild_id}", headers = self.headers)
 
         return response.json()
+
+# Guild
+    def create_guild(self, name: str, icon: str = None) -> dict:
+        """
+        Creates guild.
+
+        Supply icon as Data URI Scheme (jpeg, png, gif):
+        data:image/jpeg;base64,BASE64_ENCODED_JPEG_IMAGE_DATA
+        """
+
+        json = {"name": name}
+        if icon != None:
+            json["icon"] = icon
+        
+        response = self._post("/guilds", json = json, headers = self.headers)
+
+        return response.json()
     
+    def get_guild(self, guild_id: int) -> dict:
+        """
+        Get data of guild specified.
+        """
+
+        response = self._get(f"/guilds/{guild_id}", headers = self.headers)
+
+        return response.json()
+    
+
+
