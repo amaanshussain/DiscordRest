@@ -179,7 +179,7 @@ class DiscordRest:
         if image != None:
             json["image"] = image
         
-        response = self._post(f"/guilds/{guild_id}/emojis", headers = self.headers)
+        response = self._post(f"/guilds/{guild_id}/emojis", json = json, headers = self.headers)
 
         return response.json()
 
